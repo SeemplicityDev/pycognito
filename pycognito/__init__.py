@@ -576,7 +576,12 @@ class Cognito:
         )
 
     def admin_create_user(
-        self, username, temporary_password="", additional_kwargs=None, attr_map=None, **kwargs
+        self,
+        username,
+        temporary_password="",
+        additional_kwargs=None,
+        attr_map=None,
+        **kwargs
     ):
         """
         Create a user using admin super privileges.
@@ -595,7 +600,7 @@ class Cognito:
             Username=username,
             UserAttributes=dict_to_cognito(kwargs, attr_map),
             TemporaryPassword=temporary_password,
-            **additional_kwargs
+            **additional_kwargs,
         )
         kwargs.update(username=username)
         self._set_attributes(response, kwargs)
