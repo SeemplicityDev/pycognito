@@ -581,7 +581,7 @@ class Cognito:
         temporary_password="",
         additional_kwargs=None,
         attr_map=None,
-        **kwargs
+        **kwargs,
     ):
         """
         Create a user using admin super privileges.
