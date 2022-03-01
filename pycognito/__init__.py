@@ -250,9 +250,9 @@ class Cognito:
                     "require_exp": True,
                 },
             )
-        except JWTError:
+        except JWTError as err:
             raise TokenVerificationException(
-                f"Your {id_name!r} token could not be verified."
+                f"Your {id_name!r} token could not be verified ({err})."
             ) from None
 
         token_use_verified = verified.get("token_use") == token_use
@@ -336,7 +336,7 @@ class Cognito:
 
         self.custom_attributes = custom_attributes
 
-    def register(self, username, password, attr_map=None):
+    def register(self, username, password, attr_map=None, client_metadata=None):
         """
         Register the user. Other base attributes from AWS Cognito User Pools
         are  address, birthdate, email, family_name (last name), gender,
@@ -346,6 +346,7 @@ class Cognito:
         :param username: User Pool username
         :param password: User Pool password
         :param attr_map: Attribute map to Cognito's attributes
+        :param client_metadata: Metadata about the user that will be used for ClientMetadata
         :return response: Response from Cognito
 
         Example response::
@@ -372,6 +373,8 @@ class Cognito:
             "Password": password,
             "UserAttributes": cognito_attributes,
         }
+        if client_metadata is not None:
+            params["ClientMetadata"] = client_metadata
         self._add_secret_hash(params, "SecretHash")
         response = self.client.sign_up(**params)
 
@@ -412,6 +415,19 @@ class Cognito:
         }
         self._add_secret_hash(params, "SecretHash")
         self.client.confirm_sign_up(**params)
+
+    def resend_confirmation_code(self, username):
+        """
+         Trigger resending the confirmation code message.
+        :param username: User's username
+        :return:
+        """
+        params = {
+            "ClientId": self.client_id,
+            "Username": username,
+        }
+        self._add_secret_hash(params, "SecretHash")
+        self.client.resend_confirmation_code(**params)
 
     def admin_authenticate(self, password):
         """
