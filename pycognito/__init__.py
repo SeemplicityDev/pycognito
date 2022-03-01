@@ -867,7 +867,7 @@ class Cognito:
             ProviderDetails=provider_details,
             **kwargs,
         )
-        
+
     def describe_user_pool_client(self, pool_id: str, client_id: str):
         """
         Returns configuration information of a specified user pool app client
@@ -876,11 +876,11 @@ class Cognito:
         :return: client json
 
         """
-        return self.client.describe_user_pool_client(UserPoolId=pool_id, ClientId=client_id)['UserPoolClient']
+        return self.client.describe_user_pool_client(
+            UserPoolId=pool_id, ClientId=client_id
+        )["UserPoolClient"]
 
-    def admin_update_user_pool_client(
-            self, pool_id: str, client_id: str, **kwargs
-    ):
+    def admin_update_user_pool_client(self, pool_id: str, client_id: str, **kwargs):
         """
         Updates configuration information of a specified user pool app client
         :param pool_id: The identity pool ID
