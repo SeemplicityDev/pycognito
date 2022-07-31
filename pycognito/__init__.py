@@ -874,8 +874,7 @@ class Cognito:
         :return: dict of identity provider
         """
         self.client.describe_identity_provider(
-            UserPoolId=pool_id,
-            ProviderName=provider_name
+            UserPoolId=pool_id, ProviderName=provider_name
         )
 
     def admin_update_identity_provider(self, pool_id, provider_name, **kwargs):
